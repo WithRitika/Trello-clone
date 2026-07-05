@@ -41,6 +41,12 @@ const Home = () => {
       <div className="flex item-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">My Boards</h1>
         <button
+          onClick={() => navigate("/users")}
+          className="bg-white text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50"
+        >
+          Users
+        </button>
+        <button
           onClick={() => setShowForm(!showForm)}
           className="bg-blue-600 text-white rounded-lg px-4 py-2 cursor-pointer text-sm font-medium hover:bg-blue-700"
         >
