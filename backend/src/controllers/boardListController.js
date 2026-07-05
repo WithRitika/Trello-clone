@@ -48,8 +48,7 @@ exports.getOneBoardList = async (req, res) => {
 exports.updateBoardList = async (req, res) => {
   try {
     const boardList = await BoardList.findByIdAndUpdate(
-      req,
-      params.id,
+      req.params.id,
       req.body,
       { new: true },
     );

@@ -1,47 +1,47 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import api from '../api/axios'
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 function UsersPage() {
-  const [users, setUsers] = useState([])
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [showForm, setShowForm] = useState(false)
-  const navigate = useNavigate()
+  const [users, setUsers] = useState([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await api.get('/users')
-        if (res.status === 200) setUsers(res.data)
+        const res = await api.get("/users");
+        if (res.status === 200) setUsers(res.data);
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
-    fetchUsers()
-  }, [])
+    };
+    fetchUsers();
+  }, []);
 
   const createUser = async () => {
-    if (!name.trim() || !email.trim()) return
+    if (!name.trim() || !email.trim()) return;
     try {
-      const res = await api.post('/users', { name, email })
+      const res = await api.post("/users", { name, email });
       if (res.status === 201 || res.status === 200) {
-        setUsers([...users, res.data])
-        setName('')
-        setEmail('')
-        setShowForm(false)
+        setUsers([...users, res.data]);
+        setName("");
+        setEmail("");
+        setShowForm(false);
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="text-gray-500 hover:text-gray-800 text-sm"
           >
             ← Back
@@ -85,22 +85,21 @@ function UsersPage() {
         {users.length === 0 ? (
           <p className="text-gray-500 p-4 text-sm">No users yet.</p>
         ) : (
-          users.map((user) => (
-            <div key={user._id} className="flex items-center gap-4 p-4 border-b border-gray-100">
-              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                {user.name.charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800">{user.name}</p>
-                <p className="text-xs text-gray-500">{user.email}</p>
-              </div>
-              <p className="text-xs text-gray-400 ml-auto">{user._id}</p>
-            </div>
-          ))
+         users.map((user) => (
+  <div key={user._id} className="flex items-center gap-4 p-4 border-b border-gray-100">
+    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
+      {user.name.charAt(0).toUpperCase()}
+    </div>
+    <div>
+      <p className="text-sm font-medium text-gray-800">{user.name}</p>
+      <p className="text-xs text-gray-500">{user.email}</p>
+    </div>
+  </div>
+))
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default UsersPage
+export default UsersPage;

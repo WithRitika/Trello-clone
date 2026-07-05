@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import BoardList from "../components/BoardList";
 import AddList from "../components/AddList";
+import AddMember from "../components/AddMember";
 
 const BoardPage = () => {
   const [board, setBoard] = useState(null);
@@ -30,7 +31,7 @@ const BoardPage = () => {
             res.data.map(async (list) => {
               const listRes = await api.get(`/boardlists/${list._id}`);
               return listRes.data;
-            })
+            }),
           );
           setBoardLists(listWithCards);
         }
@@ -54,7 +55,7 @@ const BoardPage = () => {
           return { ...list, cards: [...list.cards, newCard] };
         }
         return list;
-      })
+      }),
     );
   };
 
@@ -68,7 +69,7 @@ const BoardPage = () => {
           };
         }
         return list;
-      })
+      }),
     );
   };
 
@@ -92,7 +93,7 @@ const BoardPage = () => {
           };
         }
         return list;
-      })
+      }),
     );
   };
 
@@ -101,39 +102,46 @@ const BoardPage = () => {
       boardLists.map((list) => ({
         ...list,
         cards: list.cards.map((card) =>
-          card._id === cardId ? updatedCard : card
+          card._id === cardId ? updatedCard : card,
         ),
-      }))
+      })),
     );
   };
-
+  const handleMemberAdded = (updatedBoard) => {
+    setBoard(updatedBoard);
+  };
   if (!board) return <div className="text-gray-500 p-8">Loading...</div>;
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="bg-blue-600 px-8 py-4 flex items-center gap-4">
-        <button
-          onClick={() => navigate('/')}
-          className="text-blue-200 hover:text-white text-sm"
+     <div className="bg-blue-600 px-8 py-4 flex items-center justify-between">
+  <div className="flex items-center gap-4">
+    <button
+      onClick={() => navigate('/')}
+      className="text-blue-200 hover:text-white text-sm"
+    >
+      ← Back
+    </button>
+    <div>
+      <h1 className="text-white font-bold text-xl">{board.name}</h1>
+      <p className="text-blue-200 text-sm">{board.privacy}</p>
+    </div>
+  </div>
+  <div className="flex items-center gap-3">
+    <div className="flex gap-2">
+      {board.members && board.members.map((member) => (
+        <div
+          key={member._id}
+          className="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center text-white text-xs font-bold"
+          title={member.name}
         >
-          ← Back
-        </button>
-        <div>
-          <h1 className="text-white font-bold text-xl">{board.name}</h1>
-          <p className="text-blue-200 text-sm">{board.privacy}</p>
+          {member.name.charAt(0).toUpperCase()}
         </div>
-        <div className="flex gap-2 ml-auto">
-          {board.members && board.members.map((member) => (
-            <div
-              key={member._id}
-              className="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center text-white text-xs font-bold"
-              title={member.name}
-            >
-              {member.name.charAt(0).toUpperCase()}
-            </div>
-          ))}
-        </div>
-      </div>
+      ))}
+    </div>
+    <AddMember boardId={id} onMemberAdded={handleMemberAdded} />
+  </div>
+</div>
 
       <div className="p-8 flex gap-4 overflow-x-auto items-start">
         {boardLists.map((list) => (

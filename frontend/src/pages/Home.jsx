@@ -36,6 +36,10 @@ const Home = () => {
     }
   };
 
+  const handleBoardDeleted = (boardId) => {
+    setBoards(boards.filter((board) => board._id !== boardId));
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="flex item-center justify-between mb-6">
@@ -77,6 +81,7 @@ const Home = () => {
               key={board._id}
               board={board}
               onClick={() => navigate(`/board/${board._id}`)}
+              onBoardDeleted={handleBoardDeleted}
             />
           ))}
         </div>
